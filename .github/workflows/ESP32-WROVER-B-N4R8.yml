@@ -22,11 +22,9 @@ jobs:
 
       - name: Initialization environment
         run: |
-          sudo apt update -y
-          sudo apt install -y build-essential git cmake python3.11-venv
-          sudo apt autoremove -y
-          sudo apt clean
-          mkdier $ESP
+          sudo apt-get update -y
+          sudo apt-get install -y build-essential git cmake python3.11-venv
+          mkdir $ESP
           git clone --branch $MICROPYTHON_VERSION $MICROPYTHON_REPO $MICROPYTHON
           git clone --branch $ESPIDF_BRANCH $ESPIDF_REPO $ESPIDF
 
