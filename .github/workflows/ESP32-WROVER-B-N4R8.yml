@@ -14,7 +14,7 @@ env:
 
 jobs:
   ESP32-WROVER-B-N4R8_MicroPython_Firmware:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -22,10 +22,10 @@ jobs:
 
       - name: Initialization environment
         run: |
-          apt update -y
-          apt install -y build-essential git cmake python3.11-venv
-          apt autoremove -y
-          apt clean
+          sudo apt update -y
+          sudo apt install -y build-essential git cmake python3.11-venv
+          sudo apt autoremove -y
+          sudo apt clean
           mkdier $ESP
           git clone --branch $MICROPYTHON_VERSION $MICROPYTHON_REPO $MICROPYTHON
           git clone --branch $ESPIDF_BRANCH $ESPIDF_REPO $ESPIDF
