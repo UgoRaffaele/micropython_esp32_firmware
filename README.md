@@ -1,2 +1,2 @@
-# micropython_esp32_-firmware
-micropython_esp32_ firmware
+# micropython_esp32_firmware
+micropython esp32 firmware
