@@ -70,7 +70,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file_glob: true
-          file: $ESP/*
+          file: $ESP/ESP32-WROVER-B-N4R8_MicroPython-${{ env.MICROPYTHON_VERSION }}_${{ env.COMPILE_DATE }}.bin
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
           tag: ESP32-WROVER-B-N4R8_MicroPython-${{ env.MICROPYTHON_VERSION }}_${{ env.COMPILE_DATE }}
           body: |
