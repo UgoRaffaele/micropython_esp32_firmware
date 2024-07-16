@@ -14,7 +14,7 @@ env:
 
 jobs:
   ESP32-WROVER-B-N4R8_MicroPython_Firmware:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout
@@ -23,18 +23,35 @@ jobs:
       - name: Initialization environment
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y build-essential git cmake python3.11-venv
+          sudo apt-get install -y build-essential git cmake curl software-properties-common
+          sudo add-apt-repository ppa:deadsnakes/ppa
+          sudo apt-get install -y python3.11 python-is-python3
+          curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+          python get-pip.py --force-reinstall
+          pip install mpy-cross-v6
           mkdir $ESP
+      
+      - name: Clone MicroPython
+        run: |
           git clone -b $MICROPYTHON_VERSION --recursive $MICROPYTHON_REPO $MICROPYTHON
+          cd $MICROPYTHON
+          git checkout $MICROPYTHON_VERSION
+          git submodule update --init --recursive
+
+      - name: Clone ESP-IDF
+        run: |
           git clone -b $ESPIDF_VERSION --recursive $ESPIDF_REPO $ESPIDF
+          cd $ESPIDF
+          git checkout $ESPIDF_VERSION
+          git submodule update --init --recursive
+          ./install.sh
+          source export.sh
 
       - name: Compile the firmware
         id: compile
         run: |
-          cd $ESPIDF
-          ./install.sh
-          source export.sh
-          cd ../$MICROPYTHON
+          source $ESPIDF/export.sh
+          cd $MICROPYTHON
           make -C mpy-cross
           cd ports/esp32
           make submodules
