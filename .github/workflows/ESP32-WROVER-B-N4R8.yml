@@ -9,7 +9,7 @@ env:
   MICROPYTHON_VERSION: v1.23.0
   ESPIDF: esp-idf
   ESPIDF_REPO: https://github.com/espressif/esp-idf.git
-  ESPIDF_BRANCH: v5.0.5
+  ESPIDF_VERSION: v5.0.5
   ESP: esp
 
 jobs:
@@ -25,23 +25,20 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y build-essential git cmake python3.11-venv
           mkdir $ESP
-          git clone --branch $MICROPYTHON_VERSION $MICROPYTHON_REPO $MICROPYTHON
-          git clone --branch $ESPIDF_BRANCH $ESPIDF_REPO $ESPIDF
-
-      - name: Install ESP-IDF
-        run: |
-          cd $ESPIDF
-          ./install.sh
-          source export.sh
+          git clone -b $MICROPYTHON_VERSION --recursive $MICROPYTHON_REPO $MICROPYTHON
+          git clone -b $ESPIDF_VERSION --recursive $ESPIDF_REPO $ESPIDF
 
       - name: Compile the firmware
         id: compile
         run: |
-          cd $MICROPYTHON
+          cd $ESPIDF
+          ./install.sh
+          source export.sh
+          cd ../$MICROPYTHON
           make -C mpy-cross
           cd ports/esp32
           make submodules
-          make
+          make V=1
           echo "status=success" >> $GITHUB_OUTPUT
           echo "COMPILE_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
