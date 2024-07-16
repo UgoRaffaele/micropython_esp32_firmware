@@ -10,7 +10,6 @@ env:
   ESPIDF: esp-idf
   ESPIDF_REPO: https://github.com/espressif/esp-idf.git
   ESPIDF_VERSION: v5.0.5
-  ESP: esp
 
 jobs:
   ESP32-WROVER-B-N4R8_MicroPython_Firmware:
@@ -29,7 +28,6 @@ jobs:
           curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
           python get-pip.py --force-reinstall
           pip install mpy-cross-v6
-          mkdir $ESP
       
       - name: Clone MicroPython
         run: |
@@ -62,7 +60,8 @@ jobs:
       - name: Organize compiled firmware
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
-          mv $MICROPYTHON/ports/esp32/build-ESP32_GENERIC/micropython.bin $ESP/ESP32-WROVER-B-N4R8_MicroPython-${{ env.MICROPYTHON_VERSION }}_${{ env.COMPILE_DATE }}.bin
+          cd $MICROPYTHON/ports/esp32/build-ESP32_GENERIC
+          mv micropython.bin ESP32-WROVER-B-N4R8_MicroPython-${{ env.MICROPYTHON_VERSION }}_${{ env.COMPILE_DATE }}.bin
 
       - name: Upload firmware to release
         if: steps.compile.outputs.status == 'success' && !cancelled()
@@ -70,7 +69,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file_glob: true
-          file: $ESP/ESP32-WROVER-B-N4R8_MicroPython-${{ env.MICROPYTHON_VERSION }}_${{ env.COMPILE_DATE }}.bin
+          file: $MICROPYTHON/ports/esp32/build-ESP32_GENERIC/ESP32-WROVER-B-N4R8_MicroPython-${{ env.MICROPYTHON_VERSION }}_${{ env.COMPILE_DATE }}.bin
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
           tag: ESP32-WROVER-B-N4R8_MicroPython-${{ env.MICROPYTHON_VERSION }}_${{ env.COMPILE_DATE }}
           body: |
