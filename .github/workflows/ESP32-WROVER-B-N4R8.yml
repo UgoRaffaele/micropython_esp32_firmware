@@ -10,7 +10,7 @@ env:
   ESPIDF: esp-idf
   ESPIDF_REPO: https://github.com/espressif/esp-idf.git
   ESPIDF_VERSION: v5.0.5
-  WORK_PATH: /home/runner/work/micropython_esp32_firmware/micropython_esp32_firmware
+  TZ: Asia/Shanghai
 
 jobs:
   ESP32-WROVER-B-N4R8_MicroPython_Firmware:
@@ -29,6 +29,7 @@ jobs:
           curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
           python get-pip.py --force-reinstall
           pip install mpy-cross-v6
+          sudo timedatectl set-timezone "$TZ"
       
       - name: Clone MicroPython
         run: |
@@ -73,7 +74,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ${{ env.MICROPYTHON }}/ports/esp32/build-ESP32_GENERIC/ESP32-WROVER-B-N4R8_MicroPython-${{ env.MICROPYTHON_VERSION }}_${{ env.COMPILE_DATE }}.bin
-          asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
+          asset_name: ESP32-WROVER-B-N4R8_MicroPython-${{ env.MICROPYTHON_VERSION }}_${{ env.COMPILE_DATE }}.bin
           tag: ESP32-WROVER-B-N4R8_MicroPython-${{ env.MICROPYTHON_VERSION }}_${{ env.COMPILE_DATE }}
           body: |
             ### ESP32-WROVER-B-N4R8 MicroPython Firmware
