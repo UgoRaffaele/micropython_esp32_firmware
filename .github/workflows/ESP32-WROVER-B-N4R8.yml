@@ -68,7 +68,6 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file_glob: true
           file: $MICROPYTHON/ports/esp32/build-ESP32_GENERIC/ESP32-WROVER-B-N4R8_MicroPython-${{ env.MICROPYTHON_VERSION }}_${{ env.COMPILE_DATE }}.bin
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
           tag: ESP32-WROVER-B-N4R8_MicroPython-${{ env.MICROPYTHON_VERSION }}_${{ env.COMPILE_DATE }}
