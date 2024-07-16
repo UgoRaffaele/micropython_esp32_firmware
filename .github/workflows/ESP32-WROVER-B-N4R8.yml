@@ -36,6 +36,9 @@ jobs:
           cd $MICROPYTHON
           git checkout $MICROPYTHON_VERSION
           git submodule update --init --recursive
+          cd ..
+          cp sdkconfig.custom $MICROPYTHON/ports/esp32/boards/
+          cp mpconfigboard.cmake $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/
 
       - name: Clone ESP-IDF
         run: |
