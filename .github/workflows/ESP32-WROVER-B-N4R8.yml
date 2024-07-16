@@ -38,8 +38,6 @@ jobs:
           git checkout $MICROPYTHON_VERSION
           git submodule update --init --recursive
           cd ..
-          rm -rf $MICROPYTHON/ports/esp32/boards/sdkconfig.custom
-          cp sdkconfig.custom $MICROPYTHON/ports/esp32/boards/
           rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/mpconfigboard.cmake
           cp mpconfigboard.cmake $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/
 
