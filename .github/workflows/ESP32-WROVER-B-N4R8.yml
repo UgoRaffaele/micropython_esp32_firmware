@@ -66,16 +66,16 @@ jobs:
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
           cd $MICROPYTHON/ports/esp32/build-ESP32_GENERIC
-          mv micropython.bin ESP32-WROVER-B-N4R8_MicroPython-${{ env.MICROPYTHON_VERSION }}_${{ env.COMPILE_DATE }}.bin
+          mv micropython.bin MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-WROVER-B-N4R8_${{ env.COMPILE_DATE }}.bin
 
       - name: Upload firmware to release
         if: steps.compile.outputs.status == 'success' && !cancelled()
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.MICROPYTHON }}/ports/esp32/build-ESP32_GENERIC/ESP32-WROVER-B-N4R8_MicroPython-${{ env.MICROPYTHON_VERSION }}_${{ env.COMPILE_DATE }}.bin
-          asset_name: ESP32-WROVER-B-N4R8_MicroPython-${{ env.MICROPYTHON_VERSION }}_${{ env.COMPILE_DATE }}.bin
-          tag: ESP32-WROVER-B-N4R8_MicroPython-${{ env.MICROPYTHON_VERSION }}_${{ env.COMPILE_DATE }}
+          file: ${{ env.MICROPYTHON }}/ports/esp32/build-ESP32_GENERIC/MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-WROVER-B-N4R8_${{ env.COMPILE_DATE }}.bin
+          asset_name: MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-WROVER-B-N4R8_${{ env.COMPILE_DATE }}.bin
+          tag: ${{ env.MICROPYTHON_VERSION }}
           body: |
             ### ESP32-WROVER-B-N4R8 MicroPython Firmware
           overwrite: true
