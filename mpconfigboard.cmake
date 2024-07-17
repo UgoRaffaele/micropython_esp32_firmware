@@ -3,5 +3,5 @@ set(SDKCONFIG_DEFAULTS
     ${SDKCONFIG_IDF_VERSION_SPECIFIC}
     boards/sdkconfig.ble
     boards/sdkconfig.240mhz
-    boards/sdkconfig.spiram
+    boards/sdkconfig.spiram_sx
 )
