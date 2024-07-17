@@ -43,7 +43,7 @@ jobs:
           cd $ESPIDF
           git checkout $ESPIDF_VERSION
           git submodule update --init --recursive
-          ./install.sh esp32
+          ./install.sh
           source export.sh
 
       - name: Compile the firmware
