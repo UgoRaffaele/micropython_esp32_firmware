@@ -1,4 +1,4 @@
-name: ESP32-WROVER-B-N4R8 MicroPython Firmware
+name: ESP32-WROVER-B MicroPython Firmware
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ env:
   TZ: Asia/Shanghai
 
 jobs:
-  ESP32-WROVER-B-N4R8_MicroPython_Firmware:
+  ESP32-WROVER-B_MicroPython_Firmware:
     runs-on: ubuntu-22.04
 
     steps:
@@ -59,15 +59,15 @@ jobs:
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
           cd $MICROPYTHON/ports/esp32/build-ESP32_GENERIC
-          mv micropython.bin MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-WROVER-B-N4R8_${{ env.COMPILE_DATE }}.bin
+          mv micropython.bin MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-WROVER-B_${{ env.COMPILE_DATE }}.bin
 
       - name: Upload firmware to release
         if: steps.compile.outputs.status == 'success' && !cancelled()
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.MICROPYTHON }}/ports/esp32/build-ESP32_GENERIC/MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-WROVER-B-N4R8_${{ env.COMPILE_DATE }}.bin
-          asset_name: MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-WROVER-B-N4R8_${{ env.COMPILE_DATE }}.bin
+          file: ${{ env.MICROPYTHON }}/ports/esp32/build-ESP32_GENERIC/MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-WROVER-B_${{ env.COMPILE_DATE }}.bin
+          asset_name: MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-WROVER-B_${{ env.COMPILE_DATE }}.bin
           tag: ${{ env.MICROPYTHON_VERSION }}
           body: |
             ### MicroPython Firmware For ESP32
