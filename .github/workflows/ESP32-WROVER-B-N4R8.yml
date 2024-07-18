@@ -9,7 +9,7 @@ env:
   MICROPYTHON_VERSION: v1.23.0
   ESPIDF: esp-idf
   ESPIDF_REPO: https://github.com/espressif/esp-idf.git
-  ESPIDF_VERSION: v5.0.5
+  ESPIDF_VERSION: v5.1.2
   TZ: Asia/Shanghai
 
 jobs:
@@ -59,7 +59,7 @@ jobs:
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
           cd $MICROPYTHON/ports/esp32/build-ESP32_GENERIC-SPIRAM
-          mv micropython.bin MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-WROVER-B-N4R8_${{ env.COMPILE_DATE }}.bin
+          mv firmware.bin MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-WROVER-B-N4R8_${{ env.COMPILE_DATE }}.bin
 
       - name: Upload firmware to release
         if: steps.compile.outputs.status == 'success' && !cancelled()

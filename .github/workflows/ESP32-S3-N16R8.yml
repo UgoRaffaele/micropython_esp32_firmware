@@ -1,4 +1,4 @@
-name: ESP32-S3-N8R16 MicroPython Firmware
+name: ESP32-S3-N16R8 MicroPython Firmware
 
 on:
   workflow_dispatch:
@@ -9,11 +9,11 @@ env:
   MICROPYTHON_VERSION: v1.23.0
   ESPIDF: esp-idf
   ESPIDF_REPO: https://github.com/espressif/esp-idf.git
-  ESPIDF_VERSION: v5.0.5
+  ESPIDF_VERSION: v5.1.2
   TZ: Asia/Shanghai
 
 jobs:
-  ESP32-S3-N8R16_MicroPython_Firmware:
+  ESP32-S3-N16R8_MicroPython_Firmware:
     runs-on: ubuntu-22.04
 
     steps:
@@ -45,8 +45,8 @@ jobs:
 
       - name: Custom MicroPython for ESP32
         run: |
-          rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC_S3
-          mv ESP32-S3-N8R16 $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC_S3
+          rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC_S3/sdkconfig.board
+          cp ESP32-S3-N16R8/sdkconfig.board $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC_S3/
 
       - name: Compile the firmware
         id: compile
@@ -56,23 +56,23 @@ jobs:
           make -C mpy-cross
           cd ports/esp32
           make submodules
-          make V=1 BOARD=ESP32_GENERIC_S3
+          make V=1 BOARD=ESP32_GENERIC_S3 BOARD_VARIANT=SPIRAM_OCT
           echo "status=success" >> $GITHUB_OUTPUT
           echo "COMPILE_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
       - name: Organize compiled firmware
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
-          cd $MICROPYTHON/ports/esp32/build-ESP32_GENERIC_S3
-          mv micropython.bin MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-S3-N8R16_${{ env.COMPILE_DATE }}.bin
+          cd $MICROPYTHON/ports/esp32/build-ESP32_GENERIC_S3-SPIRAM_OCT
+          mv firmware.bin MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-S3-N16R8_${{ env.COMPILE_DATE }}.bin
 
       - name: Upload firmware to release
         if: steps.compile.outputs.status == 'success' && !cancelled()
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.MICROPYTHON }}/ports/esp32/build-ESP32_GENERIC_S3/MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-S3-N8R16_${{ env.COMPILE_DATE }}.bin
-          asset_name: MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-S3-N8R16_${{ env.COMPILE_DATE }}.bin
+          file: ${{ env.MICROPYTHON }}/ports/esp32/build-ESP32_GENERIC_S3-SPIRAM_OCT/MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-S3-N16R8_${{ env.COMPILE_DATE }}.bin
+          asset_name: MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-S3-N16R8_${{ env.COMPILE_DATE }}.bin
           tag: ${{ env.MICROPYTHON_VERSION }}
           body: |
             ### MicroPython Firmware For ESP32
