@@ -42,12 +42,7 @@ jobs:
         run: |
           git clone $LVGL_REPO $LVGL
           cd $LVGL
-          git submodule update --init --recursive lib/lv_bindings
-      
-      - name: Fix BerkeleyDB
-        run: |    
-          rm -rf $LVGL/lib/berkeley-db-1.xx
-          git clone -b $BerkeleyDB_BRANCH $BerkeleyDB_REPO -b $LVGL/lib/berkeley-db-1.xx
+          git submodule update --init --recursive
 
       - name: Custom LVGL for ESP32
         run: |
