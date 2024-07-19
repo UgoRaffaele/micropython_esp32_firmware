@@ -1,4 +1,4 @@
-name: ESP32-WROVER-B-N4R8 LV_MicroPython Firmware
+name: ESP32-WROVER-B-N4R8 LVGL Firmware
 
 on:
   workflow_dispatch:

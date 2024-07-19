@@ -1,4 +1,4 @@
-name: ESP32-S3-N16R8 LV_MicroPython Firmware
+name: ESP32-S3-N16R8 LVGL Firmware
 
 on:
   workflow_dispatch:
