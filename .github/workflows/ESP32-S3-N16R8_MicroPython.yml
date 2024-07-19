@@ -13,7 +13,7 @@ env:
   TZ: Asia/Shanghai
 
 jobs:
-  ESP32-S3-N16R8_MicroPython_Firmware:
+  ESP32-S3-N16R8_MicroPython:
     runs-on: ubuntu-22.04
 
     steps:
@@ -46,7 +46,7 @@ jobs:
       - name: Custom MicroPython for ESP32
         run: |
           rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC_S3/sdkconfig.board
-          cp ESP32-S3-N16R8/sdkconfig.board $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC_S3/
+          mv ESP32-S3-N16R8/micropython.board $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC_S3/sdkconfig.board
 
       - name: Compile the firmware
         id: compile
@@ -73,7 +73,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ${{ env.MICROPYTHON }}/ports/esp32/build-ESP32_GENERIC_S3-SPIRAM_OCT/MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-S3-N16R8_${{ env.COMPILE_DATE }}.bin
           asset_name: MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-S3-N16R8_${{ env.COMPILE_DATE }}.bin
-          tag: ${{ env.MICROPYTHON_VERSION }}
+          tag: MicroPython-${{ env.MICROPYTHON_VERSION }}
           body: |
             ### MicroPython Firmware For ESP32
           overwrite: true
@@ -82,12 +82,4 @@ jobs:
         uses: Mattraks/delete-workflow-runs@main
         with:
           retain_days: 0
-          keep_minimum_runs: 2
-
-      - name: Remove old releases
-        uses: dev-drprasad/delete-older-releases@master
-        with:
-          keep_latest: 4
-          delete_tags: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          keep_minimum_runs: 8
