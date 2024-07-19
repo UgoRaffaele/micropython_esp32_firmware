@@ -7,6 +7,8 @@ env:
   LVGL: lv_micropython
   LVGL_REPO: https://github.com/lvgl/lv_micropython.git
   LVGL_VERSION: v9.1.0
+  BerkeleyDB_REPO: https://github.com/pfalcon/berkeley-db-1.xx.git
+  BerkeleyDB_BRANCH: embedded
   ESPIDF: esp-idf
   ESPIDF_REPO: https://github.com/espressif/esp-idf.git
   ESPIDF_VERSION: v4.4.8
@@ -41,6 +43,11 @@ jobs:
           git clone $LVGL_REPO $LVGL
           cd $LVGL
           git submodule update --init --recursive lib/lv_bindings
+      
+      - name: Fix BerkeleyDB
+        run: |    
+          rm -rf $LVGL/lib/berkeley-db-1.xx
+          git clone -b $BerkeleyDB_BRANCH $BerkeleyDB_REPO -b $LVGL/lib/berkeley-db-1.xx
 
       - name: Custom LVGL for ESP32
         run: |

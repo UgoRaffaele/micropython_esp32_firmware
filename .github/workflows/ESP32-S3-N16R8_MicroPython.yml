@@ -10,7 +10,6 @@ env:
   ESPIDF: esp-idf
   ESPIDF_REPO: https://github.com/espressif/esp-idf.git
   ESPIDF_VERSION: v5.2.2
-
   TZ: Asia/Shanghai
 
 jobs:

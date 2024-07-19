@@ -4,7 +4,7 @@ MicroPython、LVGL(lv_Micropython) firmware for ESP32.
 ## Version
 ### Micropython
 MicroPython:           v1.23.0  
-ESP-IDF:               v5.1.2
+ESP-IDF:               v5.2.2
 
 ### LVGL
 LVGL(lv_Micropython):  v9.1.0  
