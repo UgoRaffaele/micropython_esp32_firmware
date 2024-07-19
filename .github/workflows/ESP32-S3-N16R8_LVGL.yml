@@ -47,6 +47,10 @@ jobs:
         run: |
           rm -rf $LVGL/lib/lv_bindings/driver/esp32/espidf.h
           mv $LVGLFIX/lib/lv_bindings/driver/esp32/espidf.h $LVGL/lib/lv_bindings/driver/esp32/
+          rm -rf $LVGL/lib/lv_bindings/driver/esp32/modrtch.c
+          mv $LVGLFIX/lib/lv_bindings/driver/esp32/modrtch.c $LVGL/lib/lv_bindings/driver/esp32/
+          rm -rf $LVGL/lib/lv_bindings/mkrules.cmake
+          mv $LVGLFIX/lib/lv_bindings/mkrules.cmake $LVGL/lib/lv_bindings/
           rm -rf $LVGL/ports/esp32/network_common.c
           mv $LVGLFIX/ports/esp32/network_common.c $LVGL/ports/esp32/
           rm -rf $LVGL/ports/esp32/boards/GENERIC_S3_SPIRAM_OCT/sdkconfig.board

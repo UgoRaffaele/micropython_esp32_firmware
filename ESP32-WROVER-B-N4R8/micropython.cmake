@@ -1,7 +1,10 @@
 set(SDKCONFIG_DEFAULTS
-    boards/sdkconfig.base
-    ${SDKCONFIG_IDF_VERSION_SPECIFIC}
-    boards/sdkconfig.ble
+    ${SDKCONFIG_DEFAULTS}
+    boards/sdkconfig.spiram
     boards/sdkconfig.240mhz
     boards/ESP32_GENERIC/sdkconfig.board
+)
+
+list(APPEND MICROPY_DEF_BOARD
+    MICROPY_HW_BOARD_NAME="Generic ESP32 module with SPIRAM"
 )
