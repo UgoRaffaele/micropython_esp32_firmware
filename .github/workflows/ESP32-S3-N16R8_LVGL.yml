@@ -7,8 +7,6 @@ env:
   LVGL: lv_micropython
   LVGL_REPO: https://github.com/lvgl/lv_micropython.git
   LVGL_VERSION: v9.1.0
-  BerkeleyDB_REPO: https://github.com/pfalcon/berkeley-db-1.xx.git
-  BerkeleyDB_BRANCH: embedded
   ESPIDF: esp-idf
   ESPIDF_REPO: https://github.com/espressif/esp-idf.git
   ESPIDF_VERSION: v4.4.8
@@ -46,6 +44,7 @@ jobs:
 
       - name: Custom LVGL for ESP32
         run: |
+          sed -i "s/#define TEST_WIFI_AUTH_MAX 9/#define TEST_WIFI_AUTH_MAX 10/" $LVGL/ports/esp32/network_common.c
           rm -rf $LVGL/ports/esp32/boards/GENERIC_S3_SPIRAM_OCT/sdkconfig.board
           mv ESP32-S3-N16R8/lvgl.board $LVGL/ports/esp32/boards/GENERIC_S3_SPIRAM_OCT/sdkconfig.board
 
