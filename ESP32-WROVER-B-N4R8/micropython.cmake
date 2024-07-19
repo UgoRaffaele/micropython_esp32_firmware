@@ -2,7 +2,6 @@ set(SDKCONFIG_DEFAULTS
     ${SDKCONFIG_DEFAULTS}
     boards/sdkconfig.spiram
     boards/sdkconfig.240mhz
-    boards/ESP32_GENERIC/sdkconfig.board
 )
 
 list(APPEND MICROPY_DEF_BOARD

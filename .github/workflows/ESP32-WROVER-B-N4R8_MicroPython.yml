@@ -45,8 +45,6 @@ jobs:
 
       - name: Custom MicroPython for ESP32
         run: |
-          rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/sdkconfig.board
-          mv ESP32-WROVER-B-N4R8/micropython.board $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/sdkconfig.board
           rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/mpconfigvariant_SPIRAM.cmake
           mv ESP32-WROVER-B-N4R8/micropython.cmake $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/mpconfigvariant_SPIRAM.cmake
 
