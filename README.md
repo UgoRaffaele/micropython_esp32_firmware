@@ -1,5 +1,7 @@
 # MicroPython LVGL(lv_Micropython) ESP32 Firmware
-MicroPython、LVGL(lv_Micropython) firmware for ESP32.
+MicroPython、LVGL(lv_Micropython) firmware for ESP32.  
+1. CPU 240MHz  
+2. SPIRAM
 
 ## Version
 ### Micropython
