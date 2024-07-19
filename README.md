@@ -13,5 +13,3 @@ ESP-IDF:               v4.4.8
 ## Board
 * [x] ESP32-WROVER-B-N4R8  
 * [x] ESP32-S3-N16R8
-
-
