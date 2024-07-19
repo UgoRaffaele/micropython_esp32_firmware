@@ -9,7 +9,7 @@ env:
   LVGL_VERSION: v9.1.0
   ESPIDF: esp-idf
   ESPIDF_REPO: https://github.com/espressif/esp-idf.git
-  ESPIDF_VERSION: v5.1.2
+  ESPIDF_VERSION: v4.4.8
   TZ: Asia/Shanghai
 
 jobs:
