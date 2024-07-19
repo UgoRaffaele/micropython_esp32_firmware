@@ -43,10 +43,10 @@ jobs:
           git checkout $MICROPYTHON_VERSION
           git submodule update --init --recursive
 
-      - name: Custom MicroPython for ESP32
-        run: |
-          rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/mpconfigvariant_SPIRAM.cmake
-          mv ESP32-WROVER-B-N4R8/micropython.cmake $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/mpconfigvariant_SPIRAM.cmake
+      #- name: Custom MicroPython for ESP32
+      #  run: |
+      #    rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/mpconfigvariant_SPIRAM.cmake
+      #    mv ESP32-WROVER-B-N4R8/micropython.cmake $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/mpconfigvariant_SPIRAM.cmake
 
       - name: Compile the firmware
         id: compile
