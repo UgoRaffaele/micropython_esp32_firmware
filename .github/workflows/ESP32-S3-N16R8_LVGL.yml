@@ -62,7 +62,8 @@ jobs:
           source $ESPIDF/export.sh
           cd $LVGL
           make -C mpy-cross
-          make -C ports/esp32 LV_CFLAGS="-DLV_COLOR_DEPTH=16" BOARD=GENERIC_S3_SPIRAM_OCT
+          make -C ports/esp32 submodules
+          make -C ports/esp32 LV_CFLAGS="-DLV_COLOR_DEPTH=16 -DLV_COLOR_16_SWAP=1" BOARD=GENERIC_S3_SPIRAM_OCT
           echo "status=success" >> $GITHUB_OUTPUT
           echo "COMPILE_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
