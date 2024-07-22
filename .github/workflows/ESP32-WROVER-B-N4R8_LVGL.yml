@@ -42,6 +42,11 @@ jobs:
           cd $LVGL
           git submodule update --init --recursive lib/lv_bindings
 
+      - name: Custom LVGL for ESP32
+        run: |
+          rm -rf $LVGL/ports/esp32/network_common.c
+          mv $LVGLFIX/ports/esp32/network_common.c $LVGL/ports/esp32/
+
       - name: Compile the firmware
         id: compile
         run: |
