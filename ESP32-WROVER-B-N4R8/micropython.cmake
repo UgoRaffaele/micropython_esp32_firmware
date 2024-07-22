@@ -1,7 +1,7 @@
 set(SDKCONFIG_DEFAULTS
     ${SDKCONFIG_DEFAULTS}
-    boards/sdkconfig.spiram
     boards/sdkconfig.240mhz
+    boards/sdkconfig.spiram
 )
 
 list(APPEND MICROPY_DEF_BOARD
