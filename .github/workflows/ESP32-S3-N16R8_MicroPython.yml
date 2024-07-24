@@ -76,6 +76,8 @@ jobs:
           tag: MicroPython-${{ env.MICROPYTHON_VERSION }}
           body: |
             ### MicroPython Firmware For ESP32
+            MicroPython:           v1.23.0  
+            ESP-IDF:               v5.2.2
           overwrite: true
 
       - name: Delete workflow runs

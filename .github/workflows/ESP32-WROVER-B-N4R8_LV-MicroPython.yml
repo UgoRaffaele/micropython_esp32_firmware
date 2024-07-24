@@ -1,4 +1,4 @@
-name: ESP32-S3-N16R8 LVGL Firmware
+name: ESP32-WROVER-B-N4R8 LV-MicroPython Firmware
 
 on:
   workflow_dispatch:
@@ -14,7 +14,7 @@ env:
   TZ: Asia/Shanghai
 
 jobs:
-  ESP32-S3-N16R8_LVGL:
+  ESP32-WROVER-B-N4R8_LV-MicroPython:
     runs-on: ubuntu-22.04
 
     steps:
@@ -41,20 +41,12 @@ jobs:
         run: |
           git clone $LVGL_REPO $LVGL
           cd $LVGL
-          git submodule update --init --recursive
+          git submodule update --init --recursive lib/lv_bindings
 
       - name: Custom LVGL for ESP32
         run: |
-          rm -rf $LVGL/lib/lv_bindings/driver/esp32/espidf.h
-          mv $LVGLFIX/lib/lv_bindings/driver/esp32/espidf.h $LVGL/lib/lv_bindings/driver/esp32/
-          rm -rf $LVGL/lib/lv_bindings/driver/esp32/modrtch.c
-          mv $LVGLFIX/lib/lv_bindings/driver/esp32/modrtch.c $LVGL/lib/lv_bindings/driver/esp32/
-          rm -rf $LVGL/lib/lv_bindings/mkrules.cmake
-          mv $LVGLFIX/lib/lv_bindings/mkrules.cmake $LVGL/lib/lv_bindings/
           rm -rf $LVGL/ports/esp32/network_common.c
           mv $LVGLFIX/ports/esp32/network_common.c $LVGL/ports/esp32/
-          rm -rf $LVGL/ports/esp32/boards/GENERIC_S3_SPIRAM_OCT/sdkconfig.board
-          mv ESP32-S3-N16R8/lvgl.board $LVGL/ports/esp32/boards/GENERIC_S3_SPIRAM_OCT/sdkconfig.board
 
       - name: Compile the firmware
         id: compile
@@ -63,26 +55,30 @@ jobs:
           cd $LVGL
           make -C mpy-cross
           make -C ports/esp32 submodules
-          make -C ports/esp32 LV_CFLAGS="-DLV_COLOR_DEPTH=16 -DLV_COLOR_16_SWAP=1" BOARD=GENERIC_S3_SPIRAM_OCT
+          make -C ports/esp32 LV_CFLAGS="-DLV_COLOR_DEPTH=16 -DLV_COLOR_16_SWAP=1" BOARD=GENERIC_SPIRAM
           echo "status=success" >> $GITHUB_OUTPUT
           echo "COMPILE_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
       - name: Organize compiled firmware
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
-          cd $LVGL/ports/esp32/build-GENERIC_S3_SPIRAM_OCT
-          mv firmware.bin LVGL-${{ env.LVGL_VERSION }}_ESP32-S3-N16R8_${{ env.COMPILE_DATE }}.bin
+          cd $LVGL/ports/esp32/build-GENERIC_SPIRAM
+          mv firmware.bin LV-MicroPython-${{ env.LVGL_VERSION }}_ESP32-WROVER-B-N4R8_${{ env.COMPILE_DATE }}.bin
 
       - name: Upload firmware to release
         if: steps.compile.outputs.status == 'success' && !cancelled()
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.LVGL }}/ports/esp32/build-GENERIC_S3_SPIRAM_OCT/LVGL-${{ env.LVGL_VERSION }}_ESP32-S3-N16R8_${{ env.COMPILE_DATE }}.bin
-          asset_name: LVGL-${{ env.LVGL_VERSION }}_ESP32-S3-N16R8_${{ env.COMPILE_DATE }}.bin
-          tag: LVGL-${{ env.LVGL_VERSION }}
+          file: ${{ env.LVGL }}/ports/esp32/build-GENERIC_SPIRAM/LV-MicroPython-${{ env.LVGL_VERSION }}_ESP32-WROVER-B-N4R8_${{ env.COMPILE_DATE }}.bin
+          asset_name: LV-MicroPython-${{ env.LVGL_VERSION }}_ESP32-WROVER-B-N4R8_${{ env.COMPILE_DATE }}.bin
+          tag: LV-MicroPython-${{ env.LVGL_VERSION }}
           body: |
-            ### LV_MicroPython Firmware For ESP32
+            ### LVGL & MicroPython Firmware For ESP32
+            [lv-Micropython](https://github.com/lvgl/lv_micropython) 
+            LVGL:                  v9.1.0  
+            MicroPython:           v1.20.0  
+            ESP-IDF:               v4.4.8
           overwrite: true
 
       - name: Delete workflow runs

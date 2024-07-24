@@ -1,0 +1,65 @@
+name: ESP32-WROVER-B-N4R8 LVGL-MicroPython Firmware
+
+on:
+  workflow_dispatch:
+
+env:
+  LVGL: lvgl_micropython
+  LVGL_REPO: https://github.com/kdschlosser/lvgl_micropython.git
+  LVGL_VERSION: v9.1.0
+  TZ: Asia/Shanghai
+
+jobs:
+  ESP32-WROVER-B-N4R8_LVGL-MicroPython:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Initialization environment
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y build-essential libffi-dev git pkg-config
+          sudo apt-get install -y git wget flex bison gperf python3 python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0 python-is-python3 pip
+          sudo timedatectl set-timezone "$TZ"
+
+      - name: Clone LVGL
+        run: |
+          git clone $LVGL_REPO $LVGL
+
+      - name: Compile the firmware
+        id: compile
+        run: |
+          cd $LVGL
+          python3 make.py esp32 submodules clean mpy_cross BOARD=ESP32_GENERIC BOARD_VARIANT=SPIRAM LV_CFLAGS="-DLV_COLOR_DEPTH=16 -DLV_COLOR_16_SWAP=1" --flash-size=4
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo "COMPILE_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+
+      - name: Organize compiled firmware
+        if: steps.compile.outputs.status == 'success' && !cancelled()
+        run: |
+          cd $LVGL/build
+          mv lvgl_micropy_ESP32_GENERIC-SPIRAM-4_FLASH.bin LVGL-MicroPython-${{ env.LVGL_VERSION }}_ESP32-WROVER-B-N4R8_${{ env.COMPILE_DATE }}.bin
+
+      - name: Upload firmware to release
+        if: steps.compile.outputs.status == 'success' && !cancelled()
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ env.LVGL }}/build/LVGL-MicroPython-${{ env.LVGL_VERSION }}_ESP32-WROVER-B-N4R8_${{ env.COMPILE_DATE }}.bin
+          asset_name: LVGL-MicroPython-${{ env.LVGL_VERSION }}_ESP32-WROVER-B-N4R8_${{ env.COMPILE_DATE }}.bin
+          tag: LVGL-MicroPython-${{ env.LVGL_VERSION }}
+          body: |
+            ### LVGL & MicroPython Firmware For ESP32
+            [LVGL-MicroPython](https://github.com/kdschlosser/lvgl_micropython)  
+            LVGL:                  v9.1.0  
+            MicroPython:           v1.23.0  
+            ESP-IDF:               v5.2.0
+          overwrite: true
+
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+          retain_days: 0
+          keep_minimum_runs: 4
