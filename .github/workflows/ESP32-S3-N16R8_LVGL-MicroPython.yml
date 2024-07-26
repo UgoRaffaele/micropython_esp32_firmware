@@ -40,7 +40,7 @@ jobs:
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
           cd $LVGL/build
-          mv lvgl_micropy_ESP32_GENERIC_S3-SPIRAM_OCT-16_OCTFLASH.bin LVGL-MicroPython-${{ env.LVGL_VERSION }}_ESP32-S3-N16R8_${{ env.COMPILE_DATE }}.bin
+          mv lvgl_micropy_ESP32_GENERIC_S3-SPIRAM_OCT-16.bin LVGL-MicroPython-${{ env.LVGL_VERSION }}_ESP32-S3-N16R8_${{ env.COMPILE_DATE }}.bin
 
       - name: Upload firmware to release
         if: steps.compile.outputs.status == 'success' && !cancelled()
