@@ -45,6 +45,12 @@ jobs:
 
       - name: Custom MicroPython for ESP32
         run: |
+          wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/Josverl/micropython-stubs/main/mip/typing.py
+          wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/micropython/micropython-lib/master/python-stdlib/logging/logging.py
+          wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/micropython/micropython-lib/master/micropython/drivers/storage/sdcard/sdcard.py
+          wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/funnygeeker/micropython-easynetwork/main/lib/easynetwork.py
+          wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/funnygeeker/micropython-easydisplay/main/driver/st7735_buf.py
+          wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/funnygeeker/micropython-easydisplay/main/lib/easydisplay.py
           rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/mpconfigvariant_SPIRAM.cmake
           mv ESP32-WROVER-B-N4R8/micropython.cmake $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/mpconfigvariant_SPIRAM.cmake
 
