@@ -51,6 +51,9 @@ jobs:
           wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/funnygeeker/micropython-easynetwork/main/lib/easynetwork.py
           wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/funnygeeker/micropython-easydisplay/main/driver/st7735_buf.py
           wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/funnygeeker/micropython-easydisplay/main/lib/easydisplay.py
+          wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/funnygeeker/micropython-easytime/main/lib/easytime.py
+          wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/funnygeeker/micropython-easybutton/main/lib/easybutton.py
+          wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/dhylands/upy-rtttl/master/rtttl.py
           rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/mpconfigvariant_SPIRAM.cmake
           mv ESP32-WROVER-B-N4R8/micropython.cmake $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/mpconfigvariant_SPIRAM.cmake
 
