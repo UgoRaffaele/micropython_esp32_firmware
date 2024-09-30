@@ -32,7 +32,7 @@ jobs:
         id: compile
         run: |
           cd $LVGL
-          python3 make.py esp32 BOARD=ESP32_GENERIC_S3 BOARD_VARIANT=SPIRAM --flash-size=8 DISPLAY=hx8369 INDEV=gt911
+          python3 make.py esp32 BOARD=ESP32_GENERIC_S3 BOARD_VARIANT=SPIRAM_OCT --flash-size=8 DISPLAY=hx8369 INDEV=gt911
           echo "status=success" >> $GITHUB_OUTPUT
           echo "COMPILE_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
@@ -40,7 +40,7 @@ jobs:
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
           cd $LVGL/build
-          mv lvgl_micropy_ESP32_GENERIC_S3-SPIRAM-8.bin LVGL-MicroPython-${{ env.LVGL_VERSION }}_ESP32-S3-N8R8_${{ env.COMPILE_DATE }}.bin
+          mv lvgl_micropy_ESP32_GENERIC_S3-SPIRAM_OCT-8.bin LVGL-MicroPython-${{ env.LVGL_VERSION }}_ESP32-S3-N8R8_${{ env.COMPILE_DATE }}.bin
 
       - name: Upload firmware to release
         if: steps.compile.outputs.status == 'success' && !cancelled()
