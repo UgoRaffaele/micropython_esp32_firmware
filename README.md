@@ -3,7 +3,7 @@ MicroPython、LVGL firmware for ESP32.
 
 ## [Micropython](https://github.com/micropython/micropython)
 ### Version
-MicroPython:           v1.23.0  
+MicroPython:           v1.24.0  
 ESP-IDF:               v5.2.2
 ### Board
 * [x] ESP32-WROVER-B-N4R8  
@@ -22,7 +22,7 @@ ESP-IDF:               v4.4.8
 A modified LVGL binding for Micropython. 
 ### Version
 LVGL:                  v9.1.0  
-MicroPython:           v1.23.0  
+MicroPython:           v1.24.0  
 ESP-IDF:               v5.2.0
 ## Board
 * [ ] ESP32-WROVER-B-N4R8  

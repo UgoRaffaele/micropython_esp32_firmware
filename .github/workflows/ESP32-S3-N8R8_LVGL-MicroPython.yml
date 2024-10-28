@@ -54,7 +54,7 @@ jobs:
             ### LVGL & MicroPython Firmware For ESP32
             [LVGL-MicroPython](https://github.com/kdschlosser/lvgl_micropython)  
             LVGL:                  v9.1.0  
-            MicroPython:           v1.23.0  
+            MicroPython:           v1.24.0  
             ESP-IDF:               v5.2.0
           overwrite: true
 
