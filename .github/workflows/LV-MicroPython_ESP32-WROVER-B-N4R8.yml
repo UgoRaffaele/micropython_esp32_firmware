@@ -1,4 +1,4 @@
-name: ESP32-WROVER-B-N4R8 LV-MicroPython Firmware
+name: LV-MicroPython For ESP32-WROVER-B-N4R8
 
 on:
   workflow_dispatch:
@@ -14,7 +14,7 @@ env:
   TZ: Asia/Shanghai
 
 jobs:
-  ESP32-WROVER-B-N4R8_LV-MicroPython:
+  LV-MicroPython_ESP32-WROVER-B-N4R8:
     runs-on: ubuntu-22.04
 
     steps:

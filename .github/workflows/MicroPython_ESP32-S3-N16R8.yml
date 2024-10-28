@@ -1,4 +1,4 @@
-name: ESP32-S3-N16R8 MicroPython Firmware
+name: MicroPython For ESP32-S3-N16R8
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ env:
   TZ: Asia/Shanghai
 
 jobs:
-  ESP32-S3-N16R8_MicroPython:
+  MicroPython_ESP32-S3-N16R8:
     runs-on: ubuntu-22.04
 
     steps:
@@ -48,7 +48,7 @@ jobs:
           wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/Josverl/micropython-stubs/main/mip/typing.py
           wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/micropython/micropython-lib/master/python-stdlib/logging/logging.py
           rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC_S3/sdkconfig.board
-          mv ESP32-S3-N16R8/micropython.board $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC_S3/sdkconfig.board
+          mv ESP32-S3-N16R8/sdkconfig.board $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC_S3/sdkconfig.board
 
       - name: Compile the firmware
         id: compile

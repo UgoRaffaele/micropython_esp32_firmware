@@ -1,4 +1,4 @@
-name: ESP32-S3-N16R8 LVGL-MicroPython Firmware
+name: LVGL-MicroPython For ESP32-S3-N16R8
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ env:
   TZ: Asia/Shanghai
 
 jobs:
-  ESP32-S3-N16R8_LVGL-MicroPython:
+  LVGL-MicroPython_ESP32-S3-N16R8:
     runs-on: ubuntu-22.04
 
     steps:
