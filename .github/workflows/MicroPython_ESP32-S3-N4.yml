@@ -49,7 +49,7 @@ jobs:
           wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/micropython/micropython-lib/master/python-stdlib/logging/logging.py
           wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/micropython/micropython-lib/master/micropython/drivers/storage/sdcard/sdcard.py
           rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC_S3/sdkconfig.board
-          mv Micropython/sdkconfig_ESP32-S3-N4.board $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC_S3/sdkconfig.board
+          mv config/micropython/sdkconfig_ESP32-S3-N4.board $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC_S3/sdkconfig.board
 
       - name: Compile the firmware
         id: compile

@@ -50,8 +50,8 @@ jobs:
           wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/micropython/micropython-lib/master/micropython/drivers/storage/sdcard/sdcard.py
           rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/mpconfigboard.cmake
           rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/sdkconfig.board
-          mv Micropython/mpconfigboard_ESP32.cmake $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/mpconfigboard.cmake
-          mv Micropython/sdkconfig_ESP32-N16.board $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/sdkconfig.board
+          mv config/micropython/mpconfigboard_ESP32.cmake $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/mpconfigboard.cmake
+          mv config/micropython/sdkconfig_ESP32-N16.board $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/sdkconfig.board
 
       - name: Compile the firmware
         id: compile
