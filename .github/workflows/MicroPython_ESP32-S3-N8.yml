@@ -1,4 +1,4 @@
-name: MicroPython For ESP32-WROVER-E-N16R8
+name: MicroPython For ESP32-S3-N8
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ env:
   TZ: Asia/Shanghai
 
 jobs:
-  MicroPython_ESP32-WROVER-E-N16R8:
+  MicroPython_ESP32-S3-N8:
     runs-on: ubuntu-22.04
 
     steps:
@@ -48,13 +48,8 @@ jobs:
           wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/Josverl/micropython-stubs/main/mip/typing.py
           wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/micropython/micropython-lib/master/python-stdlib/logging/logging.py
           wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/micropython/micropython-lib/master/micropython/drivers/storage/sdcard/sdcard.py
-          wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/funnygeeker/micropython-easynetwork/main/lib/easynetwork.py
-          wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/funnygeeker/micropython-easytime/main/lib/easytime.py
-          wget -P $MICROPYTHON/ports/esp32/modules https://raw.githubusercontent.com/funnygeeker/micropython-easybutton/main/lib/easybutton.py
-          rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/mpconfigboard.cmake
-          rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/sdkconfig.board
-          mv ESP32-WROVER-E-N16R8/mpconfigboard.cmake $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/mpconfigboard.cmake
-          mv ESP32-WROVER-E-N16R8/sdkconfig.board $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC/sdkconfig.board
+          rm -rf $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC_S3/sdkconfig.board
+          mv micropython/sdkconfig_ESP32-S3-N8.board $MICROPYTHON/ports/esp32/boards/ESP32_GENERIC_S3/sdkconfig.board
 
       - name: Compile the firmware
         id: compile
@@ -64,28 +59,28 @@ jobs:
           make -C mpy-cross
           cd ports/esp32
           make submodules
-          make V=1 BOARD=ESP32_GENERIC BOARD_VARIANT=SPIRAM
+          make V=1 BOARD=ESP32_GENERIC_S3 BOARD_VARIANT=SPIRAM_OCT
           echo "status=success" >> $GITHUB_OUTPUT
           echo "COMPILE_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
       - name: Organize compiled firmware
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
-          cd $MICROPYTHON/ports/esp32/build-ESP32_GENERIC-SPIRAM
-          mv firmware.bin MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-WROVER-E-N16R8_${{ env.COMPILE_DATE }}.bin
+          cd $MICROPYTHON/ports/esp32/build-ESP32_GENERIC_S3-SPIRAM_OCT
+          mv firmware.bin MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-S3-N8_${{ env.COMPILE_DATE }}.bin
 
       - name: Upload firmware to release
         if: steps.compile.outputs.status == 'success' && !cancelled()
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.MICROPYTHON }}/ports/esp32/build-ESP32_GENERIC-SPIRAM/MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-WROVER-E-N16R8_${{ env.COMPILE_DATE }}.bin
-          asset_name: MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-WROVER-E-N16R8_${{ env.COMPILE_DATE }}.bin
+          file: ${{ env.MICROPYTHON }}/ports/esp32/build-ESP32_GENERIC_S3-SPIRAM_OCT/MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-S3-N8_${{ env.COMPILE_DATE }}.bin
+          asset_name: MicroPython-${{ env.MICROPYTHON_VERSION }}_ESP32-S3-N8_${{ env.COMPILE_DATE }}.bin
           tag: MicroPython-${{ env.MICROPYTHON_VERSION }}
           body: |
             ### MicroPython Firmware For ESP32
-            MicroPython:           v1.24.0  
-            ESP-IDF:               v5.2.2
+            1. ESP32-NX:       ESP32、ESP32-WROOM、ESP32-WROVER、ESP32-SOLO、ESP32-PICO、ESP32-MINI with SPIRAM and xMib Flash  
+            2. ESP32-S3-NX:    ESP32-S3、ESP32-S3-WROOM、ESP32-S3-MINI with Octal-SPIRAM and xMib Flash
           overwrite: true
 
       - name: Delete workflow runs
