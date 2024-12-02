@@ -1,0 +1,81 @@
+name: LVGL-MicroPython For ESP32
+
+on:
+  workflow_dispatch:
+
+env:
+  LVGL: lvgl_micropython
+  LVGL_REPO: https://github.com/lvgl-micropython/lvgl_micropython.git
+  LVGL_VERSION: v9.1.0
+  TZ: Asia/Shanghai
+
+jobs:
+  LVGL-MicroPython_ESP32:
+    name: Build LVGL-MicroPython
+    runs-on: ubuntu-22.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        info:
+          - '{ "BOARD": "ESP32_GENERIC",     "BOARD_VARIANT": "SPIRAM",      "FLASH": "4"  }'
+          - '{ "BOARD": "ESP32_GENERIC",     "BOARD_VARIANT": "SPIRAM",      "FLASH": "8"  }'
+          - '{ "BOARD": "ESP32_GENERIC",     "BOARD_VARIANT": "SPIRAM",      "FLASH": "16" }'
+          - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "4"  }'
+          - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "8"  }'
+          - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "16" }'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Initialization environment
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y build-essential libffi-dev git pkg-config
+          sudo apt-get install -y git wget flex bison gperf python3 python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0 python-is-python3 pip
+          sudo timedatectl set-timezone "$TZ"
+
+      - name: Clone LVGL
+        run: |
+          git clone --depth=1 $LVGL_REPO $LVGL
+
+      - name: Compile the firmware
+        id: compile
+        run: |
+          cd $LVGL
+          python3 make.py esp32 BOARD=${{ fromJSON(matrix.info).BOARD }} BOARD_VARIANT=${{ fromJSON(matrix.info).BOARD_VARIANT }} --flash-size=${{ fromJSON(matrix.info).FLASH }} DISPLAY=rgb_display DISPLAY=st7796 DISPLAY=st7789 DISPLAY=st7735 DISPLAY=ili9488 DISPLAY=ili9486 DISPLAY=ili9481 DISPLAY=ili9341 DISPLAY=ili9225 DISPLAY=ili9163 DISPLAY=gc9a01 INDEV=xpt2046 INDEV=gt911 INDEV=ft6x36 INDEV=ft6x06 INDEV=ft5x16 INDEV=ft5x06
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo "COMPILE_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+
+      - name: Organize compiled firmware
+        if: steps.compile.outputs.status == 'success' && !cancelled()
+        run: |
+          cd $LVGL/build
+          mv lvgl_micropy_${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-${{ fromJSON(matrix.info).FLASH }}_FLASH.bin LVGL_${{ env.LVGL_VERSION }}-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-N${{ fromJSON(matrix.info).FLASH }}-${{ env.COMPILE_DATE }}.bin
+
+      - name: Upload firmware to release
+        if: steps.compile.outputs.status == 'success' && !cancelled()
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ env.LVGL }}/build/LVGL_${{ env.LVGL_VERSION }}-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-N${{ fromJSON(matrix.info).FLASH }}-${{ env.COMPILE_DATE }}.bin
+          asset_name: LVGL_${{ env.LVGL_VERSION }}-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-N${{ fromJSON(matrix.info).FLASH }}-${{ env.COMPILE_DATE }}.bin
+          tag: LVGL-MicroPython-${{ env.LVGL_VERSION }}
+          body: |
+            ### LVGL & MicroPython Firmware For ESP32
+            [LVGL-MicroPython](https://github.com/kdschlosser/lvgl_micropython)  
+            LVGL:                  v9.1.0  
+            MicroPython:           v1.23.0  
+            ESP-IDF:               v5.2.0
+          overwrite: true
+
+  Delete_Workflow:
+    needs: [ LVGL-MicroPython_ESP32 ]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+          retain_days: 0
+          keep_minimum_runs: 4

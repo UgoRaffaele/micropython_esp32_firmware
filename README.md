@@ -13,7 +13,7 @@ ESP-IDF:           v5.2.2
 A modified LVGL binding for Micropython. 
 ### Version
 LVGL:              v9.1.0  
-MicroPython:       v1.24.0  
+MicroPython:       v1.23.0  
 ESP-IDF:           v5.2.0
 ## Board
 * [ ] ESP32-WROVER-B-N4R8  
