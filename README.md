@@ -3,7 +3,7 @@ MicroPython、LVGL firmware for ESP32.
 
 ## [Micropython](https://github.com/micropython/micropython)
 ### Version
-MicroPython:       v1.24.0  
+MicroPython:       v1.24.1  
 ESP-IDF:           v5.2.2
 ### Board
 1. ESP32-NX:       ESP32、ESP32-WROOM、ESP32-WROVER、ESP32-SOLO、ESP32-PICO、ESP32-MINI with SPIRAM and xMib Flash  
