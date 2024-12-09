@@ -75,8 +75,8 @@ jobs:
           make submodules
           make V=1 BOARD=${{ fromJSON(matrix.info).BOARD }} BOARD_VARIANT=${{ fromJSON(matrix.info).BOARD_VARIANT }}
           echo "status=success" >> $GITHUB_OUTPUT
-          echo "OUTPUT=$($MICROPYTHON/ports/esp32/build-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }})" >> $GITHUB_ENV
-          echo "FIREMWARE=$(MicroPython-${{ fromJSON(matrix.info).BOARD }}_${{ fromJSON(matrix.info).BOARD_VARIANT }}_N${{ fromJSON(matrix.info).FLASH }}-${{ env.MICROPYTHON_VERSION }}.bin)" >> $GITHUB_ENV
+          echo "OUTPUT=$MICROPYTHON/ports/esp32/build-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}" >> $GITHUB_ENV
+          echo "FIREMWARE=MicroPython-${{ fromJSON(matrix.info).BOARD }}_${{ fromJSON(matrix.info).BOARD_VARIANT }}_N${{ fromJSON(matrix.info).FLASH }}-${{ env.MICROPYTHON_VERSION }}.bin" >> $GITHUB_ENV
 
       - name: Organize compiled firmware
         id: firmware
