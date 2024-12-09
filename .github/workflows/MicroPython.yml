@@ -29,6 +29,9 @@ jobs:
           - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "16" }'
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
       - name: Initialization environment
         run: |
           sudo apt-get update -y
