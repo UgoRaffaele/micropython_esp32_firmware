@@ -75,26 +75,28 @@ jobs:
           make submodules
           make V=1 BOARD=${{ fromJSON(matrix.info).BOARD }} BOARD_VARIANT=${{ fromJSON(matrix.info).BOARD_VARIANT }}
           echo "status=success" >> $GITHUB_OUTPUT
-          echo "COMPILE_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+          echo "OUTPUT=$($MICROPYTHON/ports/esp32/build-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }})" >> $GITHUB_ENV
+          echo "FIREMWARE=$(MicroPython_${{ env.MICROPYTHON_VERSION }}-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-N${{ fromJSON(matrix.info).FLASH }}.bin)" >> $GITHUB_ENV
 
       - name: Organize compiled firmware
+        id: firmware
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
-          cd $MICROPYTHON/ports/esp32/build-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}
-          mv firmware.bin MicroPython_${{ env.MICROPYTHON_VERSION }}-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-N${{ fromJSON(matrix.info).FLASH }}-${{ env.COMPILE_DATE }}.bin
+          cd ${{ env.OUTPUT }}
+          mv firmware.bin ${{ env.FIREMWARE }}
 
       - name: Upload firmware to release
         if: steps.compile.outputs.status == 'success' && !cancelled()
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.MICROPYTHON }}/ports/esp32/build-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}/MicroPython_${{ env.MICROPYTHON_VERSION }}-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-N${{ fromJSON(matrix.info).FLASH }}-${{ env.COMPILE_DATE }}.bin
-          asset_name: MicroPython_${{ env.MICROPYTHON_VERSION }}-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-N${{ fromJSON(matrix.info).FLASH }}-${{ env.COMPILE_DATE }}.bin
+          file: ${{ env.OUTPUT }}/${{ env.FIREMWARE }}
+          asset_name: ${{ env.FIREMWARE }}
           tag: MicroPython-${{ env.MICROPYTHON_VERSION }}
           body: |
             ### MicroPython Firmware For ESP32
-            1. ESP32-NX:       ESP32、ESP32-WROOM、ESP32-WROVER、ESP32-SOLO、ESP32-PICO、ESP32-MINI with SPIRAM and xMib Flash  
-            2. ESP32-S3-NX:    ESP32-S3、ESP32-S3-WROOM、ESP32-S3-MINI with Octal-SPIRAM and xMib Flash
+            1. ESP32_GENERIC-SPIRAM-Nx:           ESP32、ESP32-WROOM、ESP32-WROVER、ESP32-SOLO、ESP32-PICO、ESP32-MINI with SPIRAM and xMib Flash  
+            2. ESP32_GENERIC_S3-SPIRAM_OCT-Nx:    ESP32-S3、ESP32-S3-WROOM、ESP32-S3-MINI with Octal-SPIRAM and xMib Flash
           overwrite: true
 
   Delete_Workflow:

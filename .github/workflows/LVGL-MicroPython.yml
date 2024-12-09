@@ -18,12 +18,9 @@ jobs:
       fail-fast: false
       matrix:
         info:
-          - '{ "BOARD": "ESP32_GENERIC",     "BOARD_VARIANT": "SPIRAM",      "FLASH": "4"  }'
-          - '{ "BOARD": "ESP32_GENERIC",     "BOARD_VARIANT": "SPIRAM",      "FLASH": "8"  }'
-          - '{ "BOARD": "ESP32_GENERIC",     "BOARD_VARIANT": "SPIRAM",      "FLASH": "16" }'
-          - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "4"  }'
-          - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "8"  }'
-          - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "16" }'
+          - '{ "BOARD": "ESP32_GENERIC",     "BOARD_VARIANT": "SPIRAM",      "FLASH": "4",   "DISPLAY": "st7735",  "INDEV":"" }'
+          - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "8",   "DISPLAY": "hx8369",  "INDEV":"gt911" }'
+          - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "16",  "DISPLAY": "gc9a01",  "INDEV":"" }'
     
     steps:
       - name: Checkout
@@ -44,7 +41,11 @@ jobs:
         id: compile
         run: |
           cd $LVGL
-          python3 make.py esp32 BOARD=${{ fromJSON(matrix.info).BOARD }} BOARD_VARIANT=${{ fromJSON(matrix.info).BOARD_VARIANT }} --flash-size=${{ fromJSON(matrix.info).FLASH }} DISPLAY=rgb_display DISPLAY=st7796 DISPLAY=st7789 DISPLAY=st7735 DISPLAY=ili9488 DISPLAY=ili9486 DISPLAY=ili9481 DISPLAY=ili9341 DISPLAY=ili9225 DISPLAY=ili9163 DISPLAY=gc9a01 INDEV=xpt2046 INDEV=gt911 INDEV=ft6x36 INDEV=ft6x06 INDEV=ft5x16 INDEV=ft5x06
+          if [${{ fromJSON(matrix.info).INDEV }} == ""]; then
+            python3 make.py esp32 BOARD=${{ fromJSON(matrix.info).BOARD }} BOARD_VARIANT=${{ fromJSON(matrix.info).BOARD_VARIANT }} --flash-size=${{ fromJSON(matrix.info).FLASH }} DISPLAY=${{ fromJSON(matrix.info).DISPLAY }}
+          else
+            python3 make.py esp32 BOARD=${{ fromJSON(matrix.info).BOARD }} BOARD_VARIANT=${{ fromJSON(matrix.info).BOARD_VARIANT }} --flash-size=${{ fromJSON(matrix.info).FLASH }} DISPLAY=${{ fromJSON(matrix.info).DISPLAY }} INDEV=${{ fromJSON(matrix.info).INDEV }}
+          fi
           echo "status=success" >> $GITHUB_OUTPUT
           echo "COMPILE_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
@@ -52,7 +53,11 @@ jobs:
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
           cd $LVGL/build
-          mv lvgl_micropy_${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-${{ fromJSON(matrix.info).FLASH }}_FLASH.bin LVGL_${{ env.LVGL_VERSION }}-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-N${{ fromJSON(matrix.info).FLASH }}-${{ env.COMPILE_DATE }}.bin
+          if [${{ fromJSON(matrix.info).INDEV }} == ""]; then
+            mv lvgl_micropy_${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-${{ fromJSON(matrix.info).FLASH }}_FLASH.bin LVGL_${{ env.LVGL_VERSION }}-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-N${{ fromJSON(matrix.info).FLASH }}-${{ fromJSON(matrix.info).DISPLAY }}-${{ env.COMPILE_DATE }}.bin
+          else
+            mv lvgl_micropy_${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-${{ fromJSON(matrix.info).FLASH }}_FLASH.bin LVGL_${{ env.LVGL_VERSION }}-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-N${{ fromJSON(matrix.info).FLASH }}-${{ fromJSON(matrix.info).DISPLAY }}-${{ fromJSON(matrix.info).INDEV }}-${{ env.COMPILE_DATE }}.bin
+          fi
 
       - name: Upload firmware to release
         if: steps.compile.outputs.status == 'success' && !cancelled()
