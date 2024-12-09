@@ -6,8 +6,8 @@ MicroPython、LVGL firmware for ESP32.
 MicroPython:       v1.24.1  
 ESP-IDF:           v5.2.2
 ### Board
-1. ESP32_GENERIC-SPIRAM-Nx:           ESP32、ESP32-WROOM、ESP32-WROVER、ESP32-SOLO、ESP32-PICO、ESP32-MINI with SPIRAM and xMib Flash  
-2. ESP32_GENERIC_S3-SPIRAM_OCT-Nx:    ESP32-S3、ESP32-S3-WROOM、ESP32-S3-MINI with Octal-SPIRAM and xMib Flash
+1. ESP32_GENERIC_SPIRAM_Nx:           ESP32、ESP32-WROOM、ESP32-WROVER、ESP32-SOLO、ESP32-PICO、ESP32-MINI with SPIRAM and xMib Flash  
+2. ESP32_GENERIC_S3_SPIRAM_OCT_Nx:    ESP32-S3、ESP32-S3-WROOM、ESP32-S3-MINI with Octal-SPIRAM and xMib Flash
 
 ## [LVGL-MicroPython](https://github.com/kdschlosser/lvgl_micropython)
 A modified LVGL binding for Micropython. 
