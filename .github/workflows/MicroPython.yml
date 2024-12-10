@@ -68,7 +68,6 @@ jobs:
       - name: Compile the firmware
         id: compile
         run: |
-          echo "COMPILE_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
           source ${{env.ESPIDF}}/export.sh
           cd ${{env.MICROPYTHON}}
           make -C mpy-cross
@@ -78,7 +77,7 @@ jobs:
           echo "status=success" >> $GITHUB_OUTPUT
           echo "OUTPUT=${{env.MICROPYTHON}}/ports/esp32/build-${{fromJSON(matrix.info).BOARD}}-${{fromJSON(matrix.info).BOARD_VARIANT}}" >> $GITHUB_ENV
           echo "FIREMWARE_ORIGIN=firmware.bin" >> $GITHUB_ENV
-          echo "FIREMWARE=MicroPython-${{fromJSON(matrix.info).BOARD}}_${{fromJSON(matrix.info).BOARD_VARIANT}}_N${{fromJSON(matrix.info).FLASH}}-${{env.MICROPYTHON_VERSION}}-${{env.COMPILE_DATE}}.bin" >> $GITHUB_ENV
+          echo "FIREMWARE=MicroPython-${{fromJSON(matrix.info).BOARD}}_${{fromJSON(matrix.info).BOARD_VARIANT}}_N${{fromJSON(matrix.info).FLASH}}-${{env.MICROPYTHON_VERSION}}-$(date +"%Y%m%d%H%M").bin" >> $GITHUB_ENV
 
       - name: Organize compiled firmware
         id: firmware
