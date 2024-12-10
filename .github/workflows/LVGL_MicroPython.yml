@@ -1,4 +1,4 @@
-name: LVGL-MicroPython For ESP32
+name: LVGL_MicroPython For ESP32
 
 on:
   workflow_dispatch:
@@ -10,8 +10,8 @@ env:
   TZ: Asia/Shanghai
 
 jobs:
-  LVGL-MicroPython_ESP32:
-    name: Build LVGL-MicroPython
+  LVGL_MicroPython-ESP32:
+    name: Build LVGL_MicroPython
     runs-on: ubuntu-22.04
 
     strategy:
@@ -47,14 +47,14 @@ jobs:
             else
               python3 make.py esp32 BOARD=${{fromJSON(matrix.info).BOARD}} BOARD_VARIANT=${{fromJSON(matrix.info).BOARD_VARIANT}} --flash-size=${{fromJSON(matrix.info).FLASH}} DISPLAY=${{fromJSON(matrix.info).DISPLAY}}
             fi
-            echo "FIREMWARE=LVGL-${{fromJSON(matrix.info).BOARD}}_${{fromJSON(matrix.info).BOARD_VARIANT}}_N${{fromJSON(matrix.info).FLASH}}_${{fromJSON(matrix.info).DISPLAY}}-${{env.LVGL_VERSION}}-$(date +"%Y%m%d%H%M").bin" >> $GITHUB_ENV
+            echo "FIREMWARE=LVGL_MicroPython-${{fromJSON(matrix.info).BOARD}}_${{fromJSON(matrix.info).BOARD_VARIANT}}_N${{fromJSON(matrix.info).FLASH}}_${{fromJSON(matrix.info).DISPLAY}}-${{env.LVGL_VERSION}}-$(date +"%Y%m%d%H%M").bin" >> $GITHUB_ENV
           else
             if [${{fromJSON(matrix.info).FLASH}} == "4"]; then
               python3 make.py esp32 BOARD=${{fromJSON(matrix.info).BOARD}} BOARD_VARIANT=${{fromJSON(matrix.info).BOARD_VARIANT}} --flash-size=${{fromJSON(matrix.info).FLASH}} --optimize-size DISPLAY=${{fromJSON(matrix.info).DISPLAY}} INDEV=${{fromJSON(matrix.info).INDEV}}
             else
               python3 make.py esp32 BOARD=${{fromJSON(matrix.info).BOARD}} BOARD_VARIANT=${{fromJSON(matrix.info).BOARD_VARIANT}} --flash-size=${{fromJSON(matrix.info).FLASH}} DISPLAY=${{fromJSON(matrix.info).DISPLAY}} INDEV=${{fromJSON(matrix.info).INDEV}}
             fi
-            echo "FIREMWARE=LVGL-${{fromJSON(matrix.info).BOARD}}_${{fromJSON(matrix.info).BOARD_VARIANT}}_N${{fromJSON(matrix.info).FLASH}}_${{fromJSON(matrix.info).DISPLAY}}_${{fromJSON(matrix.info).INDEV}}-${{env.LVGL_VERSION}}-$(date +"%Y%m%d%H%M").bin" >> $GITHUB_ENV
+            echo "FIREMWARE=LVGL_MicroPython-${{fromJSON(matrix.info).BOARD}}_${{fromJSON(matrix.info).BOARD_VARIANT}}_N${{fromJSON(matrix.info).FLASH}}_${{fromJSON(matrix.info).DISPLAY}}_${{fromJSON(matrix.info).INDEV}}-${{env.LVGL_VERSION}}-$(date +"%Y%m%d%H%M").bin" >> $GITHUB_ENV
           fi
           echo "OUTPUT=${{env.LVGL}}/build" >> $GITHUB_ENV
           echo "FIREMWARE_ORIGIN=lvgl_micropy_${{fromJSON(matrix.info).BOARD}}-${{fromJSON(matrix.info).BOARD_VARIANT}}-${{fromJSON(matrix.info).FLASH}}.bin" >> $GITHUB_ENV
@@ -72,17 +72,17 @@ jobs:
           repo_token: ${{secrets.GITHUB_TOKEN}}
           file: ${{env.OUTPUT}}/${{env.FIREMWARE}}
           asset_name: ${{env.FIREMWARE}}
-          tag: LVGL-MicroPython-${{env.LVGL_VERSION}}
+          tag: LVGL_MicroPython-${{env.LVGL_VERSION}}
           body: |
             ### LVGL & MicroPython Firmware For ESP32
-            [LVGL-MicroPython](https://github.com/lvgl-micropython/lvgl_micropython)  
+            [LVGL_MicroPython](https://github.com/lvgl-micropython/lvgl_micropython)  
             LVGL:                  v9.1.0  
             MicroPython:           v1.23.0  
             ESP-IDF:               v5.2.0
           overwrite: true
 
   Delete_Workflow:
-    needs: [ LVGL-MicroPython_ESP32 ]
+    needs: [ LVGL_MicroPython-ESP32 ]
     runs-on: ubuntu-22.04
     steps:
       - name: Delete workflow runs
