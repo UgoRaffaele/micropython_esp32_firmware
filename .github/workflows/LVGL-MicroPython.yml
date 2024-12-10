@@ -31,44 +31,41 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y build-essential libffi-dev git pkg-config
           sudo apt-get install -y git wget flex bison gperf python3 python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0 python-is-python3 pip
-          sudo timedatectl set-timezone "$TZ"
+          sudo timedatectl set-timezone "${{env.TZ}}"
 
       - name: Clone LVGL
         run: |
-          git clone --depth=1 $LVGL_REPO $LVGL
+          git clone --depth=1 ${{env.LVGL_REPO}} ${{env.LVGL}}
 
       - name: Compile the firmware
         id: compile
         run: |
-          cd $LVGL
-          if [${{ fromJSON(matrix.info).INDEV }} == ""]; then
-            python3 make.py esp32 BOARD=${{ fromJSON(matrix.info).BOARD }} BOARD_VARIANT=${{ fromJSON(matrix.info).BOARD_VARIANT }} --flash-size=${{ fromJSON(matrix.info).FLASH }} DISPLAY=${{ fromJSON(matrix.info).DISPLAY }}
-            echo "COMPILE_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
-            echo "OUTPUT="
+          echo "COMPILE_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+          cd ${{env.LVGL}}
+          if [${{fromJSON(matrix.info).INDEV}} == ""]; then
+            python3 make.py esp32 BOARD=${{fromJSON(matrix.info).BOARD}} BOARD_VARIANT=${{fromJSON(matrix.info).BOARD_VARIANT}} --flash-size=${{fromJSON(matrix.info).FLASH}} DISPLAY=${{fromJSON(matrix.info).DISPLAY}}
+            echo "FIREMWARE=LVGL-${{fromJSON(matrix.info).BOARD}}_${{fromJSON(matrix.info).BOARD_VARIANT}}_N${{fromJSON(matrix.info).FLASH}}_${{fromJSON(matrix.info).DISPLAY}}-${{env.LVGL_VERSION}}-${{env.COMPILE_DATE}}.bin" >> $GITHUB_ENV
           else
-            python3 make.py esp32 BOARD=${{ fromJSON(matrix.info).BOARD }} BOARD_VARIANT=${{ fromJSON(matrix.info).BOARD_VARIANT }} --flash-size=${{ fromJSON(matrix.info).FLASH }} DISPLAY=${{ fromJSON(matrix.info).DISPLAY }} INDEV=${{ fromJSON(matrix.info).INDEV }}
-            echo "COMPILE_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+            python3 make.py esp32 BOARD=${{fromJSON(matrix.info).BOARD}} BOARD_VARIANT=${{fromJSON(matrix.info).BOARD_VARIANT}} --flash-size=${{fromJSON(matrix.info).FLASH}} DISPLAY=${{fromJSON(matrix.info).DISPLAY}} INDEV=${{fromJSON(matrix.info).INDEV}}
+            echo "FIREMWARE=LVGL-${{fromJSON(matrix.info).BOARD}}_${{fromJSON(matrix.info).BOARD_VARIANT}}_N${{fromJSON(matrix.info).FLASH}}_${{fromJSON(matrix.info).DISPLAY}}_${{fromJSON(matrix.info).INDEV}}-${{env.LVGL_VERSION}}-${{env.COMPILE_DATE}}.bin" >> $GITHUB_ENV
           fi
+          echo "OUTPUT=${{env.LVGL}}/build" >> $GITHUB_ENV
+          echo "FIREMWARE_ORIGIN=lvgl_micropy_${{fromJSON(matrix.info).BOARD}}-${{fromJSON(matrix.info).BOARD_VARIANT}}-${{fromJSON(matrix.info).FLASH}}_FLASH.bin" >> $GITHUB_ENV
           echo "status=success" >> $GITHUB_OUTPUT
 
       - name: Organize compiled firmware
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
-          cd $LVGL/build
-          if [${{ fromJSON(matrix.info).INDEV }} == ""]; then
-            mv lvgl_micropy_${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-${{ fromJSON(matrix.info).FLASH }}_FLASH.bin LVGL_${{ env.LVGL_VERSION }}-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-N${{ fromJSON(matrix.info).FLASH }}-${{ fromJSON(matrix.info).DISPLAY }}-${{ env.COMPILE_DATE }}.bin
-          else
-            mv lvgl_micropy_${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-${{ fromJSON(matrix.info).FLASH }}_FLASH.bin LVGL_${{ env.LVGL_VERSION }}-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-N${{ fromJSON(matrix.info).FLASH }}-${{ fromJSON(matrix.info).DISPLAY }}-${{ fromJSON(matrix.info).INDEV }}-${{ env.COMPILE_DATE }}.bin
-          fi
+          mv ${{env.OUTPUT}}/${{env.FIREMWARE_ORIGIN}} ${{env.OUTPUT}}/${{env.FIREMWARE}}
 
       - name: Upload firmware to release
         if: steps.compile.outputs.status == 'success' && !cancelled()
         uses: svenstaro/upload-release-action@v2
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.LVGL }}/build/LVGL_${{ env.LVGL_VERSION }}-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-N${{ fromJSON(matrix.info).FLASH }}-${{ env.COMPILE_DATE }}.bin
-          asset_name: LVGL_${{ env.LVGL_VERSION }}-${{ fromJSON(matrix.info).BOARD }}-${{ fromJSON(matrix.info).BOARD_VARIANT }}-N${{ fromJSON(matrix.info).FLASH }}-${{ env.COMPILE_DATE }}.bin
-          tag: LVGL-MicroPython-${{ env.LVGL_VERSION }}
+          repo_token: ${{secrets.GITHUB_TOKEN}}
+          file: ${{env.OUTPUT}}/${{env.FIREMWARE}}
+          asset_name: ${{env.FIREMWARE}}
+          tag: LVGL-MicroPython-${{env.LVGL_VERSION}}
           body: |
             ### LVGL & MicroPython Firmware For ESP32
             [LVGL-MicroPython](https://github.com/kdschlosser/lvgl_micropython)  

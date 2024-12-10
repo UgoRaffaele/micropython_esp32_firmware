@@ -10,6 +10,7 @@ env:
   ESPIDF: esp-idf
   ESPIDF_REPO: https://github.com/espressif/esp-idf.git
   ESPIDF_VERSION: v5.2.2
+  TZ: Asia/Shanghai
 
 jobs:
   MicroPython_ESP32:
@@ -36,6 +37,7 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y build-essential libffi-dev git pkg-config
           sudo apt-get install -y git wget flex bison gperf python3 python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0 python-is-python3 pip
+          sudo timedatectl set-timezone "${{env.TZ}}"
 
       - name: Clone ESP-IDF
         run: |
@@ -66,6 +68,7 @@ jobs:
       - name: Compile the firmware
         id: compile
         run: |
+          echo "COMPILE_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
           source ${{env.ESPIDF}}/export.sh
           cd ${{env.MICROPYTHON}}
           make -C mpy-cross
@@ -74,13 +77,14 @@ jobs:
           make V=1 BOARD=${{fromJSON(matrix.info).BOARD}} BOARD_VARIANT=${{fromJSON(matrix.info).BOARD_VARIANT}}
           echo "status=success" >> $GITHUB_OUTPUT
           echo "OUTPUT=${{env.MICROPYTHON}}/ports/esp32/build-${{fromJSON(matrix.info).BOARD}}-${{fromJSON(matrix.info).BOARD_VARIANT}}" >> $GITHUB_ENV
-          echo "FIREMWARE=MicroPython-${{fromJSON(matrix.info).BOARD}}_${{fromJSON(matrix.info).BOARD_VARIANT}}_N${{fromJSON(matrix.info).FLASH}}-${{env.MICROPYTHON_VERSION}}.bin" >> $GITHUB_ENV
+          echo "FIREMWARE_ORIGIN=firmware.bin" >> $GITHUB_ENV
+          echo "FIREMWARE=MicroPython-${{fromJSON(matrix.info).BOARD}}_${{fromJSON(matrix.info).BOARD_VARIANT}}_N${{fromJSON(matrix.info).FLASH}}-${{env.MICROPYTHON_VERSION}}-${{env.COMPILE_DATE}}.bin" >> $GITHUB_ENV
 
       - name: Organize compiled firmware
         id: firmware
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
-          mv ${{env.OUTPUT}}/firmware.bin ${{env.OUTPUT}}/${{env.FIREMWARE}}
+          mv ${{env.OUTPUT}}/${{env.FIREMWARE_ORIGIN}} ${{env.OUTPUT}}/${{env.FIREMWARE}}
 
       - name: Upload firmware to release
         if: steps.compile.outputs.status == 'success' && !cancelled()
@@ -92,8 +96,8 @@ jobs:
           tag: MicroPython-${{env.MICROPYTHON_VERSION}}
           body: |
             ### MicroPython Firmware For ESP32
-            1. ESP32_GENERIC_SPIRAM_Nx:           ESP32、ESP32-WROOM、ESP32-WROVER、ESP32-SOLO、ESP32-PICO、ESP32-MINI with SPIRAM and xMib Flash  
-            2. ESP32_GENERIC_S3_SPIRAM_OCT_Nx:    ESP32-S3、ESP32-S3-WROOM、ESP32-S3-MINI with Octal-SPIRAM and xMib Flash
+            1. ESP32_GENERIC_SPIRAM_Nx:           ESP32、ESP32-WROOM、ESP32-WROVER、ESP32-SOLO、ESP32-PICO、ESP32-MINI with SPIRAM and xMiB Flash  
+            2. ESP32_GENERIC_S3_SPIRAM_OCT_Nx:    ESP32-S3、ESP32-S3-WROOM、ESP32-S3-MINI with Octal-SPIRAM and xMiB Flash
           overwrite: true
 
   Delete_Workflow:
