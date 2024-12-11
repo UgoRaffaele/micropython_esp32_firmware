@@ -41,15 +41,15 @@ jobs:
         id: compile
         run: |
           cd ${{env.LVGL}}
-          if [${{fromJSON(matrix.info).INDEV}} == ""]; then
-            if [${{fromJSON(matrix.info).FLASH}} == "4"]; then
+          if ["${{fromJSON(matrix.info).INDEV}}" == ""]; then
+            if ["${{fromJSON(matrix.info).FLASH}}" == "4"]; then
               python3 make.py esp32 BOARD=${{fromJSON(matrix.info).BOARD}} BOARD_VARIANT=${{fromJSON(matrix.info).BOARD_VARIANT}} --flash-size=${{fromJSON(matrix.info).FLASH}} --optimize-size DISPLAY=${{fromJSON(matrix.info).DISPLAY}}
             else
               python3 make.py esp32 BOARD=${{fromJSON(matrix.info).BOARD}} BOARD_VARIANT=${{fromJSON(matrix.info).BOARD_VARIANT}} --flash-size=${{fromJSON(matrix.info).FLASH}} DISPLAY=${{fromJSON(matrix.info).DISPLAY}}
             fi
             echo "FIREMWARE=LVGL_MicroPython-${{fromJSON(matrix.info).BOARD}}_${{fromJSON(matrix.info).BOARD_VARIANT}}_N${{fromJSON(matrix.info).FLASH}}_${{fromJSON(matrix.info).DISPLAY}}-${{env.LVGL_VERSION}}-$(date +"%Y%m%d%H%M").bin" >> $GITHUB_ENV
           else
-            if [${{fromJSON(matrix.info).FLASH}} == "4"]; then
+            if ["${{fromJSON(matrix.info).FLASH}}" == "4"]; then
               python3 make.py esp32 BOARD=${{fromJSON(matrix.info).BOARD}} BOARD_VARIANT=${{fromJSON(matrix.info).BOARD_VARIANT}} --flash-size=${{fromJSON(matrix.info).FLASH}} --optimize-size DISPLAY=${{fromJSON(matrix.info).DISPLAY}} INDEV=${{fromJSON(matrix.info).INDEV}}
             else
               python3 make.py esp32 BOARD=${{fromJSON(matrix.info).BOARD}} BOARD_VARIANT=${{fromJSON(matrix.info).BOARD_VARIANT}} --flash-size=${{fromJSON(matrix.info).FLASH}} DISPLAY=${{fromJSON(matrix.info).DISPLAY}} INDEV=${{fromJSON(matrix.info).INDEV}}
