@@ -9,7 +9,7 @@ env:
   MICROPYTHON_VERSION: v1.24.1
   ESPIDF: esp-idf
   ESPIDF_REPO: https://github.com/espressif/esp-idf.git
-  ESPIDF_VERSION: v5.2.2
+  ESPIDF_VERSION: v5.2.3
   TZ: Asia/Shanghai
 
 jobs:
