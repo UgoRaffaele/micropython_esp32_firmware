@@ -45,8 +45,6 @@ jobs:
           cd ${{env.ESPIDF}}
           git checkout ${{env.ESPIDF_VERSION}} 
           git submodule update --init --recursive
-          ./install.sh
-          source export.sh
 
       - name: Clone MicroPython
         run: |
@@ -68,6 +66,7 @@ jobs:
       - name: Compile the firmware
         id: compile
         run: |
+          ./${{env.ESPIDF}}/install.sh esp32
           source ${{env.ESPIDF}}/export.sh
           cd ${{env.MICROPYTHON}}
           make -C mpy-cross
