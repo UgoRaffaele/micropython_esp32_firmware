@@ -11,8 +11,6 @@ ESP-IDF:           v5.4.2
 
 ## [LVGL_MicroPython](https://github.com/lvgl-micropython/lvgl_micropython)
 A modified LVGL binding for Micropython. 
-### Version
-ESP-IDF:           v5.4.0
 ## Board
 * [x] ESP32-WROVER-B-N4R8  
 * [x] ESP32-S3-N8R8  
