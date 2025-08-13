@@ -62,6 +62,7 @@ jobs:
           echo "OUTPUT=${{env.LVGL}}/build" >> $GITHUB_ENV
           echo "FIREMWARE_ORIGIN=lvgl_micropy_${{fromJSON(matrix.info).BOARD}}-${{fromJSON(matrix.info).BOARD_VARIANT}}-${{fromJSON(matrix.info).FLASH}}.bin" >> $GITHUB_ENV
           echo "status=success" >> $GITHUB_OUTPUT
+          echo "COMPILE_DATE=$(date +"%Y%m%d")" >> $GITHUB_ENV
 
       - name: Organize compiled firmware
         if: steps.compile.outputs.status == 'success' && !cancelled()
@@ -75,7 +76,7 @@ jobs:
           repo_token: ${{secrets.GITHUB_TOKEN}}
           file: ${{env.OUTPUT}}/${{env.FIREMWARE}}
           asset_name: ${{env.FIREMWARE}}
-          tag: LVGL_MicroPython-$(date +"%Y%m%d")
+          tag: LVGL_MicroPython-${{env.COMPILE_DATE}}
           body: |
             ### LVGL & MicroPython Firmware For ESP32
             [LVGL_MicroPython](https://github.com/lvgl-micropython/lvgl_micropython)  
