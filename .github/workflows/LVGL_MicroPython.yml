@@ -6,7 +6,6 @@ on:
 env:
   LVGL: lvgl_micropython
   LVGL_REPO: https://github.com/lvgl-micropython/lvgl_micropython.git
-  LVGL_VERSION: v9.1.0
   TZ: Asia/Shanghai
 
 jobs:
@@ -49,7 +48,7 @@ jobs:
               echo "python3 make.py esp32 BOARD=${{fromJSON(matrix.info).BOARD}} BOARD_VARIANT=${{fromJSON(matrix.info).BOARD_VARIANT}} --flash-size=${{fromJSON(matrix.info).FLASH}} DISPLAY=${{fromJSON(matrix.info).DISPLAY}}"
               python3 make.py esp32 BOARD=${{fromJSON(matrix.info).BOARD}} BOARD_VARIANT=${{fromJSON(matrix.info).BOARD_VARIANT}} --flash-size=${{fromJSON(matrix.info).FLASH}} DISPLAY=${{fromJSON(matrix.info).DISPLAY}}
             fi
-            echo "FIREMWARE=LVGL_MicroPython-${{fromJSON(matrix.info).BOARD}}_${{fromJSON(matrix.info).BOARD_VARIANT}}_N${{fromJSON(matrix.info).FLASH}}_${{fromJSON(matrix.info).DISPLAY}}-${{env.LVGL_VERSION}}-$(date +"%Y%m%d%H%M").bin" >> $GITHUB_ENV
+            echo "FIREMWARE=LVGL_MicroPython-${{fromJSON(matrix.info).BOARD}}_${{fromJSON(matrix.info).BOARD_VARIANT}}_N${{fromJSON(matrix.info).FLASH}}_${{fromJSON(matrix.info).DISPLAY}}-$(date +"%Y%m%d%H%M").bin" >> $GITHUB_ENV
           else
             if ["${{fromJSON(matrix.info).FLASH}}" == "4"]; then
               echo "python3 make.py esp32 BOARD=${{fromJSON(matrix.info).BOARD}} BOARD_VARIANT=${{fromJSON(matrix.info).BOARD_VARIANT}} --flash-size=${{fromJSON(matrix.info).FLASH}} --optimize-size DISPLAY=${{fromJSON(matrix.info).DISPLAY}} INDEV=${{fromJSON(matrix.info).INDEV}}"
@@ -58,7 +57,7 @@ jobs:
               echo "python3 make.py esp32 BOARD=${{fromJSON(matrix.info).BOARD}} BOARD_VARIANT=${{fromJSON(matrix.info).BOARD_VARIANT}} --flash-size=${{fromJSON(matrix.info).FLASH}} DISPLAY=${{fromJSON(matrix.info).DISPLAY}} INDEV=${{fromJSON(matrix.info).INDEV}}"
               python3 make.py esp32 BOARD=${{fromJSON(matrix.info).BOARD}} BOARD_VARIANT=${{fromJSON(matrix.info).BOARD_VARIANT}} --flash-size=${{fromJSON(matrix.info).FLASH}} DISPLAY=${{fromJSON(matrix.info).DISPLAY}} INDEV=${{fromJSON(matrix.info).INDEV}}
             fi
-            echo "FIREMWARE=LVGL_MicroPython-${{fromJSON(matrix.info).BOARD}}_${{fromJSON(matrix.info).BOARD_VARIANT}}_N${{fromJSON(matrix.info).FLASH}}_${{fromJSON(matrix.info).DISPLAY}}_${{fromJSON(matrix.info).INDEV}}-${{env.LVGL_VERSION}}-$(date +"%Y%m%d%H%M").bin" >> $GITHUB_ENV
+            echo "FIREMWARE=LVGL_MicroPython-${{fromJSON(matrix.info).BOARD}}_${{fromJSON(matrix.info).BOARD_VARIANT}}_N${{fromJSON(matrix.info).FLASH}}_${{fromJSON(matrix.info).DISPLAY}}_${{fromJSON(matrix.info).INDEV}}-$(date +"%Y%m%d%H%M").bin" >> $GITHUB_ENV
           fi
           echo "OUTPUT=${{env.LVGL}}/build" >> $GITHUB_ENV
           echo "FIREMWARE_ORIGIN=lvgl_micropy_${{fromJSON(matrix.info).BOARD}}-${{fromJSON(matrix.info).BOARD_VARIANT}}-${{fromJSON(matrix.info).FLASH}}.bin" >> $GITHUB_ENV
@@ -76,7 +75,7 @@ jobs:
           repo_token: ${{secrets.GITHUB_TOKEN}}
           file: ${{env.OUTPUT}}/${{env.FIREMWARE}}
           asset_name: ${{env.FIREMWARE}}
-          tag: LVGL_MicroPython-${{env.LVGL_VERSION}}
+          tag: LVGL_MicroPython
           body: |
             ### LVGL & MicroPython Firmware For ESP32
             [LVGL_MicroPython](https://github.com/lvgl-micropython/lvgl_micropython)  
