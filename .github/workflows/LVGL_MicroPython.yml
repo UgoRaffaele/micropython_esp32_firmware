@@ -80,9 +80,6 @@ jobs:
           body: |
             ### LVGL & MicroPython Firmware For ESP32
             [LVGL_MicroPython](https://github.com/lvgl-micropython/lvgl_micropython)  
-            LVGL:                  v9.1.0  
-            MicroPython:           v1.24.1  
-            ESP-IDF:               v5.2.3
           overwrite: true
 
   Delete_Workflow:
