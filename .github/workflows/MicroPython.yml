@@ -45,6 +45,7 @@ jobs:
           cd ${{env.ESPIDF}}
           git checkout ${{env.ESPIDF_VERSION}} 
           git submodule update --init --recursive
+          ./install.sh
 
       - name: Clone MicroPython
         run: |
@@ -58,15 +59,12 @@ jobs:
           wget -P ${{env.MICROPYTHON}}/ports/esp32/modules https://raw.githubusercontent.com/Josverl/micropython-stubs/main/mip/typing.py
           wget -P ${{env.MICROPYTHON}}/ports/esp32/modules https://raw.githubusercontent.com/micropython/micropython-lib/master/python-stdlib/logging/logging.py
           wget -P ${{env.MICROPYTHON}}/ports/esp32/modules https://raw.githubusercontent.com/micropython/micropython-lib/master/micropython/drivers/storage/sdcard/sdcard.py
-          rm -rf ${{env.MICROPYTHON}}/ports/esp32/boards/${{fromJSON(matrix.info).BOARD}}/mpconfigboard.cmake
           rm -rf ${{env.MICROPYTHON}}/ports/esp32/boards/${{fromJSON(matrix.info).BOARD}}/sdkconfig.board
-          mv config/micropython/${{fromJSON(matrix.info).BOARD}}.mpconfigboard ${{env.MICROPYTHON}}/ports/esp32/boards/${{fromJSON(matrix.info).BOARD}}/mpconfigboard.cmake
           mv config/micropython/N${{fromJSON(matrix.info).FLASH}}.sdkconfig ${{env.MICROPYTHON}}/ports/esp32/boards/${{fromJSON(matrix.info).BOARD}}/sdkconfig.board
 
       - name: Compile the firmware
         id: compile
         run: |
-          ./${{env.ESPIDF}}/install.sh esp32
           source ${{env.ESPIDF}}/export.sh
           cd ${{env.MICROPYTHON}}
           make -C mpy-cross
