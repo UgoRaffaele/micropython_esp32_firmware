@@ -81,3 +81,13 @@ jobs:
             ### LVGL & MicroPython Firmware For ESP32
             [LVGL_MicroPython](https://github.com/lvgl-micropython/lvgl_micropython)  
           overwrite: true
+
+  Delete_Workflow:
+    needs: [ LVGL_MicroPython-ESP32 ]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+          retain_days: 0
+          keep_minimum_runs: 4
