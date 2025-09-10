@@ -10,7 +10,7 @@ env:
   ESPIDF: esp-idf
   ESPIDF_REPO: https://github.com/espressif/esp-idf.git
   ESPIDF_VERSION: v5.4.2
-  TZ: Asia/Shanghai
+  TZ: Europe/Rome
 
 jobs:
   MicroPython_ESP32:
