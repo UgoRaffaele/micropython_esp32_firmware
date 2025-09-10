@@ -6,7 +6,7 @@ on:
 env:
   LVGL: lvgl_micropython
   LVGL_REPO: https://github.com/lvgl-micropython/lvgl_micropython.git
-  TZ: Asia/Shanghai
+  TZ: Europe/Rome
 
 jobs:
   LVGL_MicroPython-ESP32:
@@ -18,8 +18,8 @@ jobs:
       matrix:
         info:
           - '{ "BOARD": "ESP32_GENERIC",     "BOARD_VARIANT": "SPIRAM",      "FLASH": "4",   "DISPLAY": "st7735",  "INDEV":"" }'
-          - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "8",   "DISPLAY": "hx8369",  "INDEV":"gt911" }'
-          - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "16",  "DISPLAY": "gc9a01",  "INDEV":"" }'
+          - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "8",   "DISPLAY": "st7701",  "INDEV":"" }'
+          - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "16",  "DISPLAY": "st7701",  "INDEV":"" }'
     
     steps:
       - name: Checkout
