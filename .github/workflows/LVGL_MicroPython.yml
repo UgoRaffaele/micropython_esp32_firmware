@@ -5,7 +5,7 @@ on:
 
 env:
   LVGL: lvgl_micropython
-  LVGL_REPO: https://github.com/lvgl-micropython/lvgl_micropython.git
+  LVGL_REPO: https://github.com/UgoRaffaele/lvgl_micropython.git
   TZ: Europe/Rome
 
 jobs:
@@ -18,6 +18,8 @@ jobs:
       matrix:
         info:
           - '{ "BOARD": "ESP32_GENERIC",     "BOARD_VARIANT": "SPIRAM",      "FLASH": "4",   "DISPLAY": "st7735",  "INDEV":"" }'
+          - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM",      "FLASH": "8",   "DISPLAY": "st7701",  "INDEV":"" }'
+          - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM",      "FLASH": "16",  "DISPLAY": "st7701",  "INDEV":"" }'
           - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "8",   "DISPLAY": "st7701",  "INDEV":"" }'
           - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "16",  "DISPLAY": "st7701",  "INDEV":"" }'
     
@@ -79,7 +81,7 @@ jobs:
           tag: LVGL_MicroPython-${{env.COMPILE_DATE}}
           body: |
             ### LVGL & MicroPython Firmware For ESP32
-            [LVGL_MicroPython](https://github.com/lvgl-micropython/lvgl_micropython)  
+            [LVGL_MicroPython](https://github.com/UgoRaffaele/lvgl_micropython)  
           overwrite: true
 
   Delete_Workflow:
