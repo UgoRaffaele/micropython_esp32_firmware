@@ -18,8 +18,6 @@ jobs:
       matrix:
         info:
           - '{ "BOARD": "ESP32_GENERIC",     "BOARD_VARIANT": "SPIRAM",      "FLASH": "4",   "DISPLAY": "st7735",  "INDEV":"" }'
-          - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM",      "FLASH": "8",   "DISPLAY": "st7701",  "INDEV":"" }'
-          - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM",      "FLASH": "16",  "DISPLAY": "st7701",  "INDEV":"" }'
           - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "8",   "DISPLAY": "st7701",  "INDEV":"" }'
           - '{ "BOARD": "ESP32_GENERIC_S3",  "BOARD_VARIANT": "SPIRAM_OCT",  "FLASH": "16",  "DISPLAY": "st7701",  "INDEV":"" }'
     
